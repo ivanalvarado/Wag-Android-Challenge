@@ -3,13 +3,14 @@ package com.ivanalvaradoapps.wagandroidchallenge.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ivanalvarado on 2/26/18.
  */
 
-public class SOUsers {
+public class SOUsers implements Serializable {
 
     @SerializedName("items")
     @Expose

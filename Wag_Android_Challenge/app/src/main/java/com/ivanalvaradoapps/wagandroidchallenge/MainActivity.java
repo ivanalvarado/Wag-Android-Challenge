@@ -1,8 +1,11 @@
 package com.ivanalvaradoapps.wagandroidchallenge;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.ivanalvaradoapps.wagandroidchallenge.adapters.StackOverflowUserListAdapter;
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<SOUsers>() {
             @Override
-            public void onResponse(Call<SOUsers> call, Response<SOUsers> response) {
+            public void onResponse(Call<SOUsers> call, final Response<SOUsers> response) {
                 if (response.isSuccessful()) { // Success
                     Log.d(TAG, "Response Message: " + response.message());
                     Log.d(TAG, "count = " + response.body().getItems().size());
@@ -43,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
                     StackOverflowUserListAdapter listAdapter = new StackOverflowUserListAdapter(MainActivity.this, response.body().getItems());
                     ListView userList = MainActivity.this.findViewById(R.id.so_user_list);
                     userList.setAdapter(listAdapter);
+                    userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+                            intent.putExtra("user", response.body().getItems().get(i));
+                            MainActivity.this.startActivity(intent);
+                        }
+                    });
                 } else {
                     Log.e(TAG, "Error: " + response.errorBody());
                 }

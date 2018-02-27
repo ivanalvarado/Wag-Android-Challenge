@@ -3,11 +3,13 @@ package com.ivanalvaradoapps.wagandroidchallenge.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by ivanalvarado on 2/26/18.
  */
 
-public class BadgeCounts {
+public class BadgeCounts implements Serializable {
 
     @SerializedName("bronze")
     @Expose
