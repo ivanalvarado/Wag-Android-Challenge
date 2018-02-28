@@ -143,6 +143,8 @@
             android:layout_below="@+id/user_info_badge_layout"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="18sp"
             android:autoLink="web"/>
     </RelativeLayout>
 </ScrollView>

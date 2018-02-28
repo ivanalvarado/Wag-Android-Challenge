@@ -2,6 +2,8 @@ package com.ivanalvaradoapps.wagandroidchallenge.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.ivanalvaradoapps.wagandroidchallenge.R;
 import com.ivanalvaradoapps.wagandroidchallenge.model.Item;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -67,7 +70,12 @@ public class StackOverflowUserListAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        Picasso.with(context).load(soUserList.get(i).getProfileImage()).into(holder.userGravatarImageView);
+        if (isNetworkAvailable()) {
+            Picasso.with(context).load(soUserList.get(i).getProfileImage()).into(holder.userGravatarImageView);
+        } else {
+            Picasso.with(context).load(soUserList.get(i).getProfileImage()).networkPolicy(NetworkPolicy.OFFLINE).into(holder.userGravatarImageView);
+        }
+
         holder.userDisplayNameTextView.setText(soUserList.get(i).getDisplayName());
         holder.userLocationTextView.setText(soUserList.get(i).getLocation());
 
@@ -82,6 +90,13 @@ public class StackOverflowUserListAdapter extends BaseAdapter {
         holder.userBronzeBadgeCountTextView.setText(bronzeCount);
 
         return view;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private class ViewHolder {

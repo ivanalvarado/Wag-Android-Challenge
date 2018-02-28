@@ -11,6 +11,8 @@ import android.widget.ListView;
 import com.ivanalvaradoapps.wagandroidchallenge.adapters.StackOverflowUserListAdapter;
 import com.ivanalvaradoapps.wagandroidchallenge.model.SOUsers;
 import com.ivanalvaradoapps.wagandroidchallenge.rest.RestClient;
+import com.jakewharton.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -28,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Sets Global Singleton Picasso Instance
+        Picasso.Builder builder = new Picasso.Builder(this);
+        builder.downloader(new OkHttp3Downloader(this,Integer.MAX_VALUE));
+        Picasso built = builder.build();
+        built.setIndicatorsEnabled(true);
+        built.setLoggingEnabled(true);
+        Picasso.setSingletonInstance(built);
 
         fetchSoUsers();
     }
