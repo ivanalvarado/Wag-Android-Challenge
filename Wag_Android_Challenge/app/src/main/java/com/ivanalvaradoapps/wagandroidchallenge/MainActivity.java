@@ -17,13 +17,11 @@ import com.ivanalvaradoapps.wagandroidchallenge.rest.RestClient;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                // Reset Progress Text just in case we updated it to an error message
+                progressText.setText(R.string.fetching_users);
+
                 usersList.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
                 progressText.setVisibility(View.VISIBLE);
@@ -87,11 +88,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SOUsers> call, final Response<SOUsers> response) {
                 progressBar.setVisibility(View.GONE);
-                progressText.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
 
                 if (response.isSuccessful()) { // Success
+
+                    progressText.setVisibility(View.GONE);
+
                     StackOverflowUserListAdapter listAdapter = new StackOverflowUserListAdapter(MainActivity.this, response.body().getItems());
+
                     usersList.setVisibility(View.VISIBLE);
                     usersList.setAdapter(listAdapter);
                     usersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -104,16 +108,21 @@ public class MainActivity extends AppCompatActivity {
                     });
                 } else {
                     Log.e(TAG, "Error: " + response.errorBody());
+                    try {
+                        if (response.errorBody() != null) {
+                            progressText.setText(response.errorBody().string());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-
-
             }
 
             @Override
             public void onFailure(Call<SOUsers> call, Throwable t) {
                 Log.e(TAG, "Failed to connect to server: " + t.getMessage());
                 progressBar.setVisibility(View.GONE);
-                progressText.setVisibility(View.GONE);
+                progressText.setText(t.getMessage());
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

@@ -3,9 +3,12 @@ package com.ivanalvaradoapps.wagandroidchallenge;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.style.URLSpan;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ivanalvaradoapps.wagandroidchallenge.helper.URLSpanNoUnderline;
 import com.ivanalvaradoapps.wagandroidchallenge.model.Item;
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +26,14 @@ public class UserInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Item user = (Item) intent.getSerializableExtra("user");
 
+        buildUi(user);
+    }
+
+    /**
+     * Builds the UI of UserInfoActivity.
+     * @param user Item object that has user's info.
+     */
+    private void buildUi(Item user) {
         ImageView userImageView = findViewById(R.id.user_info_image_view);
         TextView userNameTextView = findViewById(R.id.user_info_name_text_view);
         TextView userLocationTextView = findViewById(R.id.user_info_location_text_view);
@@ -50,5 +61,21 @@ public class UserInfoActivity extends AppCompatActivity {
         userBronzeBadgeCountTextView.setText(userBronzeBadgeCount);
 
         userWebsiteTextView.setText(user.getWebsiteUrl());
+
+        if (!userWebsiteTextView.getText().equals("")) {
+            removeUnderlines((Spannable)userWebsiteTextView.getText());
+        }
+    }
+
+    private void removeUnderlines(Spannable p_Text) {
+        URLSpan[] spans = p_Text.getSpans(0, p_Text.length(), URLSpan.class);
+
+        for(URLSpan span:spans) {
+            int start = p_Text.getSpanStart(span);
+            int end = p_Text.getSpanEnd(span);
+            p_Text.removeSpan(span);
+            span = new URLSpanNoUnderline(span.getURL());
+            p_Text.setSpan(span, start, end, 0);
+        }
     }
 }

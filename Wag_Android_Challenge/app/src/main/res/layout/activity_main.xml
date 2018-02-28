@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_list_progress_bar"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:text="@string/fetching_users"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
