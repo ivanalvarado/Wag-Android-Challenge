@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wag! Android Challenge</string>
+    <string name="fetching_users">Fetching StackOverflow users. Please wait&#8230;</string>
 </resources>

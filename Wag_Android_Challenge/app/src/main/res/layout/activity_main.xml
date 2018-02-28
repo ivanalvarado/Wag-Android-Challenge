@@ -6,11 +6,31 @@
     android:layout_height="match_parent"
     tools:context="com.ivanalvaradoapps.wagandroidchallenge.MainActivity">
 
-    <ListView
-        android:id="@+id/so_user_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="0dp"/>
+    <ProgressBar
+        android:id="@+id/user_list_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
+    <TextView
+        android:id="@+id/user_list_progress_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_list_progress_bar"
+        android:layout_centerHorizontal="true"
+        android:text="@string/fetching_users"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/so_user_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:visibility="gone"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
